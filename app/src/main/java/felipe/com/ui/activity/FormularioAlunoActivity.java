@@ -36,7 +36,6 @@ public class FormularioAlunoActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater();
         getMenuInflater().inflate(R.menu.activity_formulario_aluno_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -45,6 +44,7 @@ public class FormularioAlunoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if(itemId == R.id.activity_formulario_aluno_menu_salvar){
+            System.out.println("entrei aqui");
             finalizarFormulario();
         }
         return super.onOptionsItemSelected(item);
@@ -75,6 +75,7 @@ public class FormularioAlunoActivity extends AppCompatActivity {
         }else{
             alunoDAO.salva(aluno);
         }
+        finish();
     }
 
     private void inicializarCampos() {
