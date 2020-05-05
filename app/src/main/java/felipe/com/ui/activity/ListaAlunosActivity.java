@@ -6,7 +6,6 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import felipe.com.R;
 import felipe.com.dao.AlunoDAO;
 import felipe.com.model.Aluno;
+import felipe.com.ui.adapter.ListaAlunosAdapter;
 
 import static felipe.com.ui.activity.ConstantesActivities.CHAVE_ALUNO;
 
@@ -25,7 +25,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
 
     public static final String TITULO_APPBAR = "Lista de Alunos";
     private final AlunoDAO alunoDAO = new AlunoDAO();
-    private ArrayAdapter<Aluno> adapter;
+    private ListaAlunosAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,11 +35,8 @@ public class ListaAlunosActivity extends AppCompatActivity {
         configuraFabNovoAluno();
         configurarLista();
 
-
         alunoDAO.salva(new Aluno("felipe", "13 9 8228 0395", "felipe@gmail.com"));
         alunoDAO.salva(new Aluno("fran", "13 9 8121 2868", "fran@gmail.com"));
-
-
     }
 
     @Override
@@ -83,8 +80,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
     }
 
     private void atualizarAlunos() {
-        adapter.clear();
-        adapter.addAll(alunoDAO.todos());
+        adapter.atualizar(alunoDAO.todos());
     }
 
     private void configurarLista() {
@@ -115,8 +111,8 @@ public class ListaAlunosActivity extends AppCompatActivity {
         startActivity(vaiParaFormularioActivity);
     }
 
-    private void configurarAdapter(ListView listaAlunos) {
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    private void configurarAdapter(final ListView listaAlunos) {
+        adapter = new ListaAlunosAdapter(this);
         listaAlunos.setAdapter(adapter);
     }
 }
