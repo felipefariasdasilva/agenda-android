@@ -1,5 +1,8 @@
 package felipe.com.ui.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -34,9 +37,6 @@ public class ListaAlunosActivity extends AppCompatActivity {
         setTitle(TITULO_APPBAR);
         configuraFabNovoAluno();
         configurarLista();
-
-        alunoDAO.salva(new Aluno("felipe", "13 9 8228 0395", "felipe@gmail.com"));
-        alunoDAO.salva(new Aluno("fran", "13 9 8121 2868", "fran@gmail.com"));
     }
 
     @Override
@@ -46,16 +46,30 @@ public class ListaAlunosActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
+    public boolean onContextItemSelected(@NonNull final MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.activity_lista_alunos_menu_remover) {
-            AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            Aluno alunoEscolhido = adapter.getItem(menuInfo.position);
-            remover(alunoEscolhido);
+            confirmarRemocao(item);
         }
 
         return super.onContextItemSelected(item);
 
+    }
+
+    private void confirmarRemocao(@NonNull final MenuItem item) {
+        new AlertDialog.Builder(this)
+                .setTitle("Removendo aluno")
+                .setMessage("Tem certeza que deseja remover o aluno?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                        Aluno alunoEscolhido = adapter.getItem(menuInfo.position);
+                        remover(alunoEscolhido);
+                    }
+                })
+                .setNegativeButton("Não", null)
+                .show();
     }
 
     private void configuraFabNovoAluno() {
