@@ -3,11 +3,14 @@ package felipe.com.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,8 +38,24 @@ public class ListaAlunosActivity extends AppCompatActivity {
         configuraFabNovoAluno();
         configurarLista();
 
+
         alunoDAO.salva(new Aluno("felipe", "13 9 8228 0395", "felipe@gmail.com"));
         alunoDAO.salva(new Aluno("fran", "13 9 8121 2868", "fran@gmail.com"));
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add("Remover");
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Aluno alunoEscolhido = adapter.getItem(menuInfo.position);
+        remover(alunoEscolhido);
+        return super.onContextItemSelected(item);
+
     }
 
     private void configuraFabNovoAluno() {
@@ -69,19 +88,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
         ListView listaAlunos = findViewById(R.id.activity_lista_alunos_listview);
         configurarAdapter(listaAlunos);
         configurarListenerDeClickPorItem(listaAlunos);
-        configurarListenerDeClickLongoPorItem(listaAlunos);
-
-    }
-
-    private void configurarListenerDeClickLongoPorItem(ListView listaAlunos) {
-        listaAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Aluno alunoEscolhido = (Aluno) parent.getItemAtPosition(position);
-                remover(alunoEscolhido);
-                return true;
-            }
-        });
+        registerForContextMenu(listaAlunos);
     }
 
     private void remover(Aluno alunoEscolhido) {
