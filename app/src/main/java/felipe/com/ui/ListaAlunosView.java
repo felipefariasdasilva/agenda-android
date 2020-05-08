@@ -8,24 +8,22 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.room.Room;
 
-import felipe.com.dao.AlunoDAO;
 import felipe.com.database.AgendaDatabase;
-import felipe.com.database.dao.RoomAlunoDAO;
+import felipe.com.database.dao.AlunoDAO;
 import felipe.com.model.Aluno;
 import felipe.com.ui.adapter.ListaAlunosAdapter;
 
 public class ListaAlunosView {
 
-    private final RoomAlunoDAO roomAlunoDAO;
+    private final AlunoDAO roomAlunoDAO;
     private final ListaAlunosAdapter adapter;
     private final Context context;
 
     public ListaAlunosView(Context context) {
         this.context = context;
         this.adapter = new ListaAlunosAdapter(context);
-        roomAlunoDAO = Room.databaseBuilder(context, AgendaDatabase.class, "agenda.db").build().getRoomAlunoDAO();
+        roomAlunoDAO = AgendaDatabase.getInstance(context).getRoomAlunoDAO();
     }
 
     public void confirmarRemocao(@NonNull final MenuItem item) {
