@@ -11,15 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import felipe.com.R;
+import felipe.com.database.AgendaDatabase;
+import felipe.com.database.dao.TelefoneDAO;
 import felipe.com.model.Aluno;
+import felipe.com.model.Telefone;
 
 public class ListaAlunosAdapter extends BaseAdapter {
 
     private final List<Aluno> alunos = new ArrayList<>();
     private final Context context;
+    private final TelefoneDAO telefoneDAO;
 
     public ListaAlunosAdapter(Context context) {
         this.context = context;
+        telefoneDAO = AgendaDatabase.getInstance(context).getTelefoneDAO();
     }
 
     @Override
@@ -50,7 +55,9 @@ public class ListaAlunosAdapter extends BaseAdapter {
         nome.setText(alunoDevolvido.getNome());
 
         TextView telefone = viewCriada.findViewById(R.id.item_aluno_telefone);
-        telefone.setText(alunoDevolvido.getTelefone());
+
+        Telefone primeiroTelefone = telefoneDAO.buscaPrimeiroTelefoneDoAluno(alunoDevolvido.getId());
+        telefone.setText(primeiroTelefone.getNumero());
     }
 
     private View criarView(ViewGroup parent) {
