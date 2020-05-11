@@ -9,6 +9,8 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 
+import felipe.com.asynctask.BuscaAlunosTask;
+import felipe.com.asynctask.RemoveAlunoTask;
 import felipe.com.database.AgendaDatabase;
 import felipe.com.database.dao.AlunoDAO;
 import felipe.com.model.Aluno;
@@ -16,14 +18,14 @@ import felipe.com.ui.adapter.ListaAlunosAdapter;
 
 public class ListaAlunosView {
 
-    private final AlunoDAO roomAlunoDAO;
+    private final AlunoDAO alunoDAO;
     private final ListaAlunosAdapter adapter;
     private final Context context;
 
     public ListaAlunosView(Context context) {
         this.context = context;
         this.adapter = new ListaAlunosAdapter(context);
-        roomAlunoDAO = AgendaDatabase.getInstance(context).getRoomAlunoDAO();
+        alunoDAO = AgendaDatabase.getInstance(context).getRoomAlunoDAO();
     }
 
     public void confirmarRemocao(@NonNull final MenuItem item) {
@@ -43,12 +45,13 @@ public class ListaAlunosView {
     }
 
     public void atualizarAlunos() {
-        adapter.atualizar(roomAlunoDAO.todos());
+        new BuscaAlunosTask(alunoDAO, adapter).execute();
+
     }
 
     private void remover(Aluno alunoEscolhido) {
-        roomAlunoDAO.remover(alunoEscolhido);
-        adapter.remove(alunoEscolhido);
+        new RemoveAlunoTask(alunoDAO, adapter, alunoEscolhido).execute();
+
     }
 
     public void configurarAdapter(final ListView listaAlunos) {

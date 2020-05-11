@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import felipe.com.R;
+import felipe.com.asynctask.BuscaPrimeiroTelefoneDoAluno;
 import felipe.com.database.AgendaDatabase;
 import felipe.com.database.dao.TelefoneDAO;
 import felipe.com.model.Aluno;
-import felipe.com.model.Telefone;
 
 public class ListaAlunosAdapter extends BaseAdapter {
 
@@ -56,8 +56,7 @@ public class ListaAlunosAdapter extends BaseAdapter {
 
         TextView telefone = viewCriada.findViewById(R.id.item_aluno_telefone);
 
-        Telefone primeiroTelefone = telefoneDAO.buscaPrimeiroTelefoneDoAluno(alunoDevolvido.getId());
-        telefone.setText(primeiroTelefone.getNumero());
+        new BuscaPrimeiroTelefoneDoAluno(telefoneDAO, telefone, alunoDevolvido.getId()).execute();
     }
 
     private View criarView(ViewGroup parent) {
