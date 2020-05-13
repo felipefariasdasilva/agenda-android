@@ -1,21 +1,21 @@
 package felipe.com.asynctask;
 
 import android.os.AsyncTask;
-import android.widget.TextView;
 
 import felipe.com.database.dao.TelefoneDAO;
 import felipe.com.model.Telefone;
 
-public class BuscaPrimeiroTelefoneDoAluno extends AsyncTask<Void, Void, Telefone> {
+public class BuscaPrimeiroTelefoneDoAlunoTask extends AsyncTask<Void, Void, Telefone> {
 
     private final TelefoneDAO telefoneDAO;
-    private final TextView campoTelefone;
     private final int alunoId;
+    private final PirmeiroTelefoneEncontradoListener listener;
 
-    public BuscaPrimeiroTelefoneDoAluno(TelefoneDAO telefoneDAO, TextView campoTelefone, int alunoId) {
+    public BuscaPrimeiroTelefoneDoAlunoTask(TelefoneDAO telefoneDAO, int alunoId,
+                                            PirmeiroTelefoneEncontradoListener listener) {
         this.telefoneDAO = telefoneDAO;
-        this.campoTelefone = campoTelefone;
         this.alunoId = alunoId;
+        this.listener = listener;
     }
 
     @Override
@@ -26,6 +26,10 @@ public class BuscaPrimeiroTelefoneDoAluno extends AsyncTask<Void, Void, Telefone
     @Override
     protected void onPostExecute(Telefone primeiroTelefone) {
         super.onPostExecute(primeiroTelefone);
-        campoTelefone.setText(primeiroTelefone.getNumero());
+        listener.quandoEncontrado(primeiroTelefone);
+    }
+
+    public interface PirmeiroTelefoneEncontradoListener{
+        void quandoEncontrado(Telefone telefoneEncontrado);
     }
 }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import felipe.com.R;
-import felipe.com.asynctask.BuscaPrimeiroTelefoneDoAluno;
+import felipe.com.asynctask.BuscaPrimeiroTelefoneDoAlunoTask;
 import felipe.com.database.AgendaDatabase;
 import felipe.com.database.dao.TelefoneDAO;
 import felipe.com.model.Aluno;
@@ -54,9 +54,12 @@ public class ListaAlunosAdapter extends BaseAdapter {
         TextView nome = viewCriada.findViewById(R.id.item_aluno_nome);
         nome.setText(alunoDevolvido.getNome());
 
-        TextView telefone = viewCriada.findViewById(R.id.item_aluno_telefone);
+        final TextView telefone = viewCriada.findViewById(R.id.item_aluno_telefone);
 
-        new BuscaPrimeiroTelefoneDoAluno(telefoneDAO, telefone, alunoDevolvido.getId()).execute();
+        new BuscaPrimeiroTelefoneDoAlunoTask(telefoneDAO, alunoDevolvido.getId(),
+                telefoneEncontrado ->
+                        telefone.setText( telefoneEncontrado.getNumero() ) )
+                .execute();
     }
 
     private View criarView(ViewGroup parent) {
