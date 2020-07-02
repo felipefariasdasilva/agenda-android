@@ -1,6 +1,6 @@
-# Appointment Calendar (?)
+# :blue_book: Contact Bookmark
 
-Um parágrafo simples dando uma descrição sobre o projeto 
+Aplicativo de Lista de Contatos para Android
 
 ## Começando
 
